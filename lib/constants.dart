@@ -4,10 +4,10 @@ const cTextColor = Color(0xFF121212);
 const cPrimaryColor = Color(0xFFFA8231);
 const cSecondaryColor = Color(0xFFFAFAFA);
 
-const cCollectionCaptionStyle = TextStyle(
-  fontFamily: "Montserrat",
-  color: cTextColor,
-  fontSize: 18.0,
+const cTitleStyle = TextStyle(
+  fontFamily: "Comfortaa",
+  color: cPrimaryColor,
+  fontSize: 22.0,
 );
 
 const cSongTitleStyle = TextStyle(

@@ -12,9 +12,9 @@ class StorageHandler {
     return _result;
   }
 
-  static List<String> listMusicFiles(String collection) {
+  static List<String> listMusicFiles(String path) {
     List<String> _result = List<String>();
-    List<FileSystemEntity> _directory = Directory(collection).listSync();
+    List<FileSystemEntity> _directory = Directory(path).listSync();
 
     for (FileSystemEntity _entity in _directory) {
       String file = _entity.path;

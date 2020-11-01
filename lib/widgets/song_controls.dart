@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cakeplay/models/player_handler.dart';
 import 'package:flutter/material.dart';
 
@@ -14,22 +16,50 @@ class SongControls extends StatefulWidget {
 }
 
 class _SongControlsState extends State<SongControls> {
+  bool draging = false;
   double _value = 0.0;
+  Timer timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+      if (!draging) {
+        setState(() {
+          _value = (PlayerHandler.currentPosition.inMilliseconds / PlayerHandler.songLength.inMilliseconds).toDouble(); // overflowin sometimes
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Slider(
-          value: _value,
-          onChanged: (double value) {
-            setState(() {
-              _value = value;
-            });
-          },
-          onChangeEnd: (double value) {
-            PlayerHandler.seekTo(value);
-          },
+        Padding(
+          padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+          child: Slider(
+            value: _value,
+            onChangeStart: (_) {
+              draging = true;
+            },
+            onChanged: (double value) {
+              setState(() {
+                _value = value;
+              });
+            },
+            onChangeEnd: (double value) {
+              draging = false;
+              PlayerHandler.seekTo(value);
+            },
+          ),
         ),
         _buildVariableControls(),
         _buildPlayerControls(),
@@ -87,7 +117,7 @@ class _SongControlsState extends State<SongControls> {
             backgroundColor: cPrimaryColor,
             elevation: 0,
             child: Icon(
-              Icons.play_arrow_rounded,
+              PlayerHandler.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
               color: cSecondaryColor,
               size: 35.0,
             ),

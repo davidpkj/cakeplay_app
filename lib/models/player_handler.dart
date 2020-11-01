@@ -1,15 +1,20 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:just_audio/just_audio.dart';
+
 import 'package:cakeplay/models/song_class.dart';
 import 'package:cakeplay/models/storage_handler.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:audio_service/audio_service.dart';
 
-class PlayerHandler extends BackgroundAudioTask {
+class PlayerHandler {
   static final _player = AudioPlayer();
+  static List<String> _history = List<String>();
   static Song _currentSong; // this is mainly to manage the player state (ie which song to play when)
   static Song _loadedSong; // this is to ask the player for details on the current viewable song
+
+  // TODO: Implement smart shuffle: i.e. not picking the same song in one playlist
+  static bool _shuffle;
+  static bool _repeat;
 
 /*
   static Future<Duration> load(String path) async {
@@ -40,6 +45,8 @@ class PlayerHandler extends BackgroundAudioTask {
     if (_player.playing) {
       _player.pause();
     } else {
+      if (!_history.contains(currentSong.path)) _history.add(currentSong.path);
+
       await _player.play();
 
       if (_player.processingState == ProcessingState.completed) {
@@ -49,7 +56,7 @@ class PlayerHandler extends BackgroundAudioTask {
   }
 
   // TODO: This is shuffle, implement normal next
-  static String _getNewSong(String file, List<String> files) {
+  static String _nextSongPath(String file, List<String> files) {
     int random = Random().nextInt(files.length);
 
     while (files[random] == file) {
@@ -63,12 +70,26 @@ class PlayerHandler extends BackgroundAudioTask {
     File _file = File(_loadedSong.path);
     List<String> _files = StorageHandler.listMusicFiles(_file.parent.path);
 
-    await preload(Song.fromPath(fullPath: _getNewSong(_file.path, _files)));
+    await preload(Song.fromPath(fullPath: _nextSongPath(_file.path, _files)));
 
     playpause();
   }
 
-  static Future<void> playPrevious() async {}
+  static String _lastSongPath(String file) {
+    int index = _history.indexOf(file);
+
+    if (index > 0) return _history[index--];
+
+    return file;
+  }
+
+  static Future<void> playPrevious() async {
+    File _file = File(_currentSong.path);
+
+    await preload(Song.fromPath(fullPath: _lastSongPath(_file.path)));
+
+    playpause();
+  }
 
   static Future<void> seekTo(double percent) async {
     if (_player.duration != null) {
@@ -80,51 +101,4 @@ class PlayerHandler extends BackgroundAudioTask {
   static bool get isPlaying => _player.playing;
   static Duration get songLength => _player.duration;
   static Duration get currentPosition => _player.position;
-
-/*
-  static Future<void> loadPlaylist(List<String> pathList, String prefix) async {
-    for (String path in pathList) {
-      _children.add(AudioSource.uri(Uri(path: "$prefix/$path.mp3")));
-    }
-
-    _player.load(ConcatenatingAudioSource(children: _children));
-  }
-
-  static void playpause(String prefix, String filename) {
-    int _index = _children.indexWhere((AudioSource source) => source.toJson()["uri"] == Uri(path: "$prefix/$filename.mp3").path);
-
-    if (_player.playerState.playing) {
-      if (currentlyPlaying == filename) {
-        _player.pause();
-      } else {
-        _player.stop();
-        _player.seek(Duration(milliseconds: 0), index: _index);
-        currentlyPlaying = filename;
-        _player.play();
-      }
-
-      return;
-    }
-
-    // if (_player.playbackState == AudioPlaybackState.paused || _player.playbackState == AudioPlaybackState.stopped) _player.play();
-    _player.play();
-  }
-
-  static void seekTo(double relativeValue) {
-    print(_duration);
-    // _player.seek()
-  }
-
-  static void playNext() {
-    _player.seekToNext();
-  }
-
-  static void playPrevious() {
-    _player.seekToPrevious();
-  }
-
-  static void playlistShuffle() {}
-
-  static void playlistRepeat() {}
-  */
 }

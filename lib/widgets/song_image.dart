@@ -43,10 +43,11 @@ class SongImage extends StatelessWidget {
   }
 
   Widget _buildChild() {
-    if (image == null || image.isEmpty) {
+    if (image == null || image.isEmpty || !File(image).existsSync()) {
       return Icon(
         Icons.music_note_rounded,
-        size: 35,
+        color: cSecondaryColor,
+        size: 75.0,
       );
     }
 

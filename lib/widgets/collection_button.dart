@@ -1,10 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 
 import 'package:cakeplay/constants.dart';
-import 'package:cakeplay/views/collection_view.dart';
+import 'package:cakeplay/views/playlist_view.dart';
 
 class CollectionButton extends StatelessWidget {
   CollectionButton({this.path, this.imagePath});
@@ -19,7 +18,7 @@ class CollectionButton extends StatelessWidget {
       onTap: () {
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
-            return CollectionView(path: path);
+            return PlaylistView(path: path);
           },
         ));
       },
