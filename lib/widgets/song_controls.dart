@@ -27,7 +27,7 @@ class _SongControlsState extends State<SongControls> {
     timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
       if (!draging) {
         setState(() {
-          _value = (PlayerHandler.currentPosition.inMilliseconds / PlayerHandler.songLength.inMilliseconds).toDouble(); // overflowin sometimes
+          if (PlayerHandler.currentPosition != null && PlayerHandler.songLength != null) _value = (PlayerHandler.currentPosition.inMilliseconds / PlayerHandler.songLength.inMilliseconds).toDouble(); // overflowin sometimes
         });
       }
     });
