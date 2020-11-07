@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:cakeplay/models/player_handler.dart';
 import 'package:flutter/material.dart';
+
+import 'package:audio_service/audio_service.dart';
 
 import 'package:cakeplay/constants.dart';
 
@@ -24,11 +25,14 @@ class _SongControlsState extends State<SongControls> {
   void initState() {
     super.initState();
 
-    timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+    timer = Timer.periodic(Duration(milliseconds: 100), (timer) async {
       if (!draging) {
-        setState(() {
-          if (PlayerHandler.currentPosition != null && PlayerHandler.songLength != null) _value = (PlayerHandler.currentPosition.inMilliseconds / PlayerHandler.songLength.inMilliseconds).toDouble(); // overflowin sometimes
-        });
+        try {
+          _value = await AudioService.customAction("getPositionRelative");
+          setState(() {});
+        } catch (e) {
+          print(e);
+        }
       }
     });
   }
@@ -57,7 +61,7 @@ class _SongControlsState extends State<SongControls> {
             },
             onChangeEnd: (double value) {
               draging = false;
-              PlayerHandler.seekTo(value);
+              AudioService.customAction("seekToRelative", value);
             },
           ),
         ),
@@ -67,6 +71,7 @@ class _SongControlsState extends State<SongControls> {
     );
   }
 
+  // TODO: This is still useless
   Widget _buildVariableControls() {
     return Padding(
       padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
@@ -111,17 +116,25 @@ class _SongControlsState extends State<SongControls> {
               color: cTextColor,
               size: 35.0,
             ),
-            onPressed: PlayerHandler.playPrevious,
+            onPressed: () {
+              AudioService.customAction("playPrevious");
+            },
           ),
           FloatingActionButton(
             backgroundColor: cPrimaryColor,
             elevation: 0,
             child: Icon(
-              PlayerHandler.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+              (AudioService.playbackState != null && AudioService.playbackState.playing) ? Icons.pause_rounded : Icons.play_arrow_rounded,
               color: cSecondaryColor,
               size: 35.0,
             ),
-            onPressed: PlayerHandler.playpause,
+            onPressed: () {
+              if (AudioService.playbackState.playing) {
+                AudioService.pause();
+              } else {
+                AudioService.play();
+              }
+            },
           ),
           IconButton(
             icon: Icon(
@@ -129,7 +142,9 @@ class _SongControlsState extends State<SongControls> {
               color: cTextColor,
               size: 35.0,
             ),
-            onPressed: PlayerHandler.playNext,
+            onPressed: () {
+              AudioService.customAction("playNext");
+            },
           ),
         ],
       ),

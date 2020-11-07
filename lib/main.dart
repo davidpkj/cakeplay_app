@@ -1,11 +1,12 @@
-import 'package:audio_service/audio_service.dart';
-import 'package:cakeplay/widgets/no_permission.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'package:permission_handler/permission_handler.dart';
+import 'package:audio_service/audio_service.dart';
 
 import 'package:cakeplay/constants.dart';
 import 'package:cakeplay/views/folder_view.dart';
-import 'package:flutter/services.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:cakeplay/widgets/no_permission.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

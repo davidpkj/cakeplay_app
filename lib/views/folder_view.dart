@@ -13,6 +13,7 @@ class _FolderViewState extends State<FolderView> {
   @override
   Widget build(BuildContext context) {
     List<String> _directories = StorageHandler.listDirectories();
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
