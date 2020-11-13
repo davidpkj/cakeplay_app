@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:cakeplay/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -12,10 +13,23 @@ class SongInformation extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 18.0),
-          child: Text(
-            title ?? "Unknown Title",
-            style: cSongTitleStyle,
-            textAlign: TextAlign.center,
+          child: StreamBuilder<MediaItem>(
+            stream: AudioService.currentMediaItemStream,
+            builder: (BuildContext context, AsyncSnapshot<MediaItem> snapshot) {
+              if (snapshot.hasError || !snapshot.hasData) {
+                return Text(
+                  title ?? "Unknown Title",
+                  style: cSongTitleStyle,
+                  textAlign: TextAlign.center,
+                );
+              } else {
+                return Text(
+                  snapshot.data.title ?? "Unknown Title",
+                  style: cSongTitleStyle,
+                  textAlign: TextAlign.center,
+                );
+              }
+            },
           ),
         ),
         /*

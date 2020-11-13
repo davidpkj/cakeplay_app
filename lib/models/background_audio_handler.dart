@@ -9,7 +9,8 @@ import 'package:cakeplay/models/storage_handler.dart';
 
 class AudioPlayerTask extends BackgroundAudioTask {
   static final _player = AudioPlayer();
-  final _history = List<String>();
+  static final _history = List<String>();
+  static bool _repeat = false;
 
   _refreshMediaItem(Song song) async {
     MediaItem mediaItem = MediaItem(id: song.path, title: song.title, album: "");
@@ -43,6 +44,11 @@ class AudioPlayerTask extends BackgroundAudioTask {
   }
 
   _playNext() async {
+    if (_repeat) {
+      _player.seek(Duration(microseconds: 0));
+      return;
+    }
+
     File _file = File(_history[0]);
     List<String> _files = StorageHandler.listMusicFiles(_file.parent.path);
 
@@ -50,17 +56,24 @@ class AudioPlayerTask extends BackgroundAudioTask {
   }
 
   _playPrevious() async {
-    String path = _history[1];
-
-    if (path.isNotEmpty) await _load(Song.fromPath(fullPath: path));
+    if (_history.length > 1 && _history[1].isNotEmpty) {
+      await _load(Song.fromPath(fullPath: _history[1]));
+    } else {
+      _player.seek(Duration(milliseconds: 0));
+    }
   }
 
   _load(Song song) async {
     await _player.setFilePath(song.path);
-    _history.insert(0, song.path);
-    _player.play();
-
     _refreshMediaItem(song);
+    _history.insert(0, song.path);
+    await _player.play();
+  }
+
+  _toggleRepeat() async {
+    _repeat = !_repeat;
+
+    return _repeat;
   }
 
   @override
@@ -70,7 +83,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
         await _seekToRelative(value);
         break;
       case "getPositionRelative":
-        return await _getPositionRelative();
+        return Future.value(await _getPositionRelative());
       case "playPrevious":
         await _playPrevious();
         break;
@@ -80,6 +93,8 @@ class AudioPlayerTask extends BackgroundAudioTask {
       case "load":
         await _load(value);
         break;
+      case "toggleRepeat":
+        return Future.value(await _toggleRepeat());
     }
   }
 
@@ -106,16 +121,25 @@ class AudioPlayerTask extends BackgroundAudioTask {
       );
     });
 
+    _player.processingStateStream.listen((processingState) {
+      if (processingState == ProcessingState.completed) {
+        _playNext();
+      }
+    });
+
     _load(song);
+  }
+
+  @override
+  onTaskRemoved() async {
+    if (!AudioServiceBackground.state.playing) {
+      onStop();
+    }
   }
 
   @override
   onPlay() async {
     await _player.play();
-
-    if (_player.processingState == ProcessingState.completed) {
-      _playNext();
-    }
   }
 
   @override

@@ -21,22 +21,20 @@ class SongView extends StatefulWidget {
 }
 
 class _SongViewState extends State<SongView> {
-  @override
-  void initState() {
-    super.initState();
-    AudioService.start(backgroundTaskEntrypoint: _entrypoint, params: {"path": widget.song.path, "title": widget.song.title});
+  _init() async {
+    if (AudioService.running) await AudioService.stop();
+    await AudioService.start(backgroundTaskEntrypoint: _entrypoint, params: {"path": widget.song.path, "title": widget.song.title});
   }
 
   @override
-  void dispose() {
-    AudioService.stop();
-    super.dispose();
+  void initState() {
+    super.initState();
+
+    _init();
   }
 
   @override
   Widget build(BuildContext context) {
-    // start playing here, on load, not later
-    // TODO: Show new song title, but only after a skip, because else, if a new view is openened, it might be changed instantly
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

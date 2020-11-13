@@ -17,19 +17,21 @@ class SongControls extends StatefulWidget {
 }
 
 class _SongControlsState extends State<SongControls> {
-  bool draging = false;
+  bool _repeat = false;
+  bool _draging = false;
   double _value = 0.0;
-  Timer timer;
+  Timer _timer;
 
   @override
   void initState() {
     super.initState();
 
-    timer = Timer.periodic(Duration(milliseconds: 100), (timer) async {
-      if (!draging) {
+    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) async {
+      if (!_draging) {
+        // TODO: FIXME: This might be involved with an uncaught exception
         try {
           _value = await AudioService.customAction("getPositionRelative");
-          setState(() {});
+          if (0 < _value && _value < 1) setState(() {});
         } catch (e) {
           print(e);
         }
@@ -39,7 +41,7 @@ class _SongControlsState extends State<SongControls> {
 
   @override
   void dispose() {
-    timer?.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -47,31 +49,35 @@ class _SongControlsState extends State<SongControls> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-          child: Slider(
-            value: _value,
-            onChangeStart: (_) {
-              draging = true;
-            },
-            onChanged: (double value) {
-              setState(() {
-                _value = value;
-              });
-            },
-            onChangeEnd: (double value) {
-              draging = false;
-              AudioService.customAction("seekToRelative", value);
-            },
-          ),
-        ),
+        _buildSliderControls(),
         _buildVariableControls(),
         _buildPlayerControls(),
       ],
     );
   }
 
-  // TODO: This is still useless
+  _buildSliderControls() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+      child: Slider(
+        value: _value,
+        onChangeStart: (_) {
+          _draging = true;
+        },
+        onChanged: (double value) {
+          setState(() {
+            _value = value;
+          });
+        },
+        onChangeEnd: (double value) {
+          _draging = false;
+          AudioService.customAction("seekToRelative", value);
+        },
+      ),
+    );
+  }
+
+  // TODO: This is still sorta useless
   Widget _buildVariableControls() {
     return Padding(
       padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
@@ -81,23 +87,26 @@ class _SongControlsState extends State<SongControls> {
           IconButton(
             icon: Icon(
               Icons.shuffle_rounded,
-              color: cTextColor,
+              color: Colors.grey, // cPrimaryColor,
             ),
             onPressed: null,
           ),
           IconButton(
             icon: Icon(
               Icons.favorite_border_rounded,
-              color: cTextColor,
+              color: Colors.grey, // cTextColor,
             ),
             onPressed: null,
           ),
           IconButton(
             icon: Icon(
-              Icons.repeat_rounded,
-              color: cTextColor,
+              Icons.repeat_one_rounded,
+              color: _repeat ? cPrimaryColor : cTextColor,
             ),
-            onPressed: null,
+            onPressed: () async {
+              _repeat = await AudioService.customAction("toggleRepeat");
+              setState(() {});
+            },
           ),
         ],
       ),

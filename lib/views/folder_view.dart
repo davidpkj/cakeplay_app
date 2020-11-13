@@ -23,10 +23,13 @@ class _FolderViewState extends State<FolderView> {
             title: Text("Folders"),
             centerTitle: true,
             leading: IconButton(
-              icon: Icon(Icons.favorite),
-              onPressed: () {
+              icon: Icon(
+                Icons.favorite,
+                color: Colors.grey,
+              ),
+              onPressed: null, /*() {
                 Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => FavoritesView()));
-              },
+              },*/
             ),
           ),
           SliverGrid(
