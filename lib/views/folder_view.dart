@@ -1,3 +1,4 @@
+import 'package:cakeplay/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cakeplay/views/favorites_view.dart';
@@ -25,11 +26,11 @@ class _FolderViewState extends State<FolderView> {
             leading: IconButton(
               icon: Icon(
                 Icons.favorite,
-                color: Colors.grey,
+                color: cPrimaryColor,
               ),
-              onPressed: null, /*() {
+              onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => FavoritesView()));
-              },*/
+              },
             ),
           ),
           SliverGrid(

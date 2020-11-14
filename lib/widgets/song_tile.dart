@@ -5,9 +5,10 @@ import 'package:cakeplay/views/song_view.dart';
 import 'package:cakeplay/models/song_class.dart';
 
 class SongTile extends StatelessWidget {
-  SongTile(this.song);
+  SongTile({this.song, this.refreshCallback});
 
   final Song song;
+  final Function refreshCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +18,8 @@ class SongTile extends StatelessWidget {
         style: cSongItemStyle,
         overflow: TextOverflow.ellipsis,
       ),
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => SongView(
@@ -26,6 +27,8 @@ class SongTile extends StatelessWidget {
             ),
           ),
         );
+
+        if (refreshCallback != null) refreshCallback();
       },
     );
   }

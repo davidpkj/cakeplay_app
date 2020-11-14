@@ -1,3 +1,4 @@
+import 'package:cakeplay/models/favorites_storage_handler.dart';
 import 'package:cakeplay/models/song_class.dart';
 import 'package:cakeplay/models/storage_handler.dart';
 import 'package:cakeplay/widgets/song_tile.dart';
@@ -11,8 +12,7 @@ class FavoritesView extends StatefulWidget {
 class _FavoritesViewState extends State<FavoritesView> {
   @override
   Widget build(BuildContext context) {
-    // get path from local storage - containing list of all paths to all fav songs
-    List<String> _files = StorageHandler.listMusicFiles("/storage/emulated/0/Music/");
+    List<String> _files = FavoritesStorageHandler.favorites;
 
     return Scaffold(
       body: CustomScrollView(
@@ -34,12 +34,20 @@ class _FavoritesViewState extends State<FavoritesView> {
               (BuildContext context, int index) {
                 Song song = Song.fromPath(fullPath: _files[index]);
 
-                return SongTile(song);
+                return SongTile(
+                  song: song,
+                  refreshCallback: _refresh,
+                );
               },
+              childCount: _files.length,
             ),
           ),
         ],
       ),
     );
+  }
+
+  _refresh() {
+    setState(() {});
   }
 }

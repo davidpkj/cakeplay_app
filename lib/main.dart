@@ -1,3 +1,4 @@
+import 'package:cakeplay/models/favorites_storage_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,8 +9,10 @@ import 'package:cakeplay/constants.dart';
 import 'package:cakeplay/views/folder_view.dart';
 import 'package:cakeplay/widgets/no_permission.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await FavoritesStorageHandler.load();
 
   runApp(AppRoot());
 }
@@ -52,10 +55,12 @@ class _AppRootState extends State<AppRoot> {
             if (snapshot.hasError) return NoPermission();
 
             if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-              if (snapshot.data) return FolderView();
+              if (snapshot.data == true) return FolderView();
+
+              return NoPermission(requestAgainCallback: _requestAgain);
             }
 
-            return NoPermission(requestAgainCallback: _requestAgain);
+            return NoPermission();
           },
         ),
       ),

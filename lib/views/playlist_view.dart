@@ -38,7 +38,7 @@ class _PlaylistViewState extends State<PlaylistView> {
               (BuildContext context, int index) {
                 Song song = Song.fromPath(fullPath: _files[index]);
 
-                return SongTile(song);
+                return SongTile(song: song);
               },
               childCount: _files.length,
             ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cakeplay/models/favorites_storage_handler.dart';
 import 'package:flutter/material.dart';
 
 import 'package:audio_service/audio_service.dart';
@@ -17,8 +18,9 @@ class SongControls extends StatefulWidget {
 }
 
 class _SongControlsState extends State<SongControls> {
-  bool _repeat = false;
+  bool _isFavorite = false;
   bool _draging = false;
+  bool _repeat = false;
   double _value = 0.0;
   Timer _timer;
 
@@ -79,6 +81,8 @@ class _SongControlsState extends State<SongControls> {
 
   // TODO: This is still sorta useless
   Widget _buildVariableControls() {
+    _isFavorite = FavoritesStorageHandler.favorites.contains(widget.prefix);
+
     return Padding(
       padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
       child: Row(
@@ -93,10 +97,20 @@ class _SongControlsState extends State<SongControls> {
           ),
           IconButton(
             icon: Icon(
-              Icons.favorite_border_rounded,
-              color: Colors.grey, // cTextColor,
+              _isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+              color: _isFavorite ? cPrimaryColor : cTextColor,
             ),
-            onPressed: null,
+            onPressed: () {
+              List<String> _favorites = FavoritesStorageHandler.favorites;
+
+              if (_favorites.contains(widget.prefix)) {
+                _favorites.remove(widget.prefix);
+              } else {
+                _favorites.add(widget.prefix);
+              }
+
+              FavoritesStorageHandler.save();
+            },
           ),
           IconButton(
             icon: Icon(
