@@ -14,13 +14,17 @@ void main() {
   runApp(AppRoot());
 }
 
-class AppRoot extends StatelessWidget {
+class AppRoot extends StatefulWidget {
+  @override
+  _AppRootState createState() => _AppRootState();
+}
+
+class _AppRootState extends State<AppRoot> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemNavigationBarIconBrightness: Brightness.light,
       systemNavigationBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
       statusBarColor: Colors.transparent,
     ));
 
@@ -30,6 +34,7 @@ class AppRoot extends StatelessWidget {
         primarySwatch: cSwatchColor,
         scaffoldBackgroundColor: cSecondaryColor,
         appBarTheme: AppBarTheme(
+          brightness: Brightness.light,
           actionsIconTheme: IconThemeData(color: cSecondaryColor),
           iconTheme: IconThemeData(color: cPrimaryColor),
           color: cSecondaryColor,
@@ -50,15 +55,19 @@ class AppRoot extends StatelessWidget {
               if (snapshot.data) return FolderView();
             }
 
-            return NoPermission();
+            return NoPermission(requestAgainCallback: _requestAgain);
           },
         ),
       ),
     );
   }
 
+  _requestAgain() {
+    setState(() {});
+  }
+
   Future<bool> _checkPermission() async {
-    if (!await Permission.storage.isGranted) {
+    if (!await Permission.storage.request().isGranted) {
       return false;
     }
 
