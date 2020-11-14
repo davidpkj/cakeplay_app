@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 const cTextColor = Color(0xFF121212);
-const cPrimaryColor = Color(0xFFFA8231);
+const cPrimaryColor = Color(0xFFFB2841);
 const cSecondaryColor = Color(0xFFFAFAFA);
+const cSwatchColor = Colors.red;
 
 const cTitleStyle = TextStyle(
   fontFamily: "Comfortaa",

@@ -27,7 +27,7 @@ class AppRoot extends StatelessWidget {
     return MaterialApp(
       title: "Cakeplay",
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        primarySwatch: cSwatchColor,
         scaffoldBackgroundColor: cSecondaryColor,
         appBarTheme: AppBarTheme(
           actionsIconTheme: IconThemeData(color: cSecondaryColor),
