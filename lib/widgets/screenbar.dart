@@ -1,5 +1,6 @@
-import 'package:cakeplay/constants.dart';
 import 'package:flutter/material.dart';
+
+import 'package:cakeplay/constants.dart';
 
 class ScreenBar extends StatelessWidget {
   ScreenBar({this.title});

@@ -66,7 +66,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   _load(Song song) async {
     await _player.setFilePath(song.path);
     _refreshMediaItem(song);
-    _history.insert(0, song.path);
+    _history.add(song.path);
     await _player.play();
   }
 

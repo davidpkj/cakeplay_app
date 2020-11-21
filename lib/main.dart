@@ -1,4 +1,3 @@
-import 'package:cakeplay/models/favorites_storage_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,6 +7,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:cakeplay/constants.dart';
 import 'package:cakeplay/views/folder_view.dart';
 import 'package:cakeplay/widgets/no_permission.dart';
+import 'package:cakeplay/models/favorites_storage_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +31,7 @@ class _AppRootState extends State<AppRoot> {
       statusBarColor: Colors.transparent,
     ));
 
+    // TODO: Darkmode
     return MaterialApp(
       title: "Cakeplay",
       theme: ThemeData(

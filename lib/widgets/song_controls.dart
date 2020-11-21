@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:cakeplay/models/favorites_storage_handler.dart';
 import 'package:flutter/material.dart';
 
 import 'package:audio_service/audio_service.dart';
 
 import 'package:cakeplay/constants.dart';
+import 'package:cakeplay/models/favorites_storage_handler.dart';
 
 class SongControls extends StatefulWidget {
   SongControls({this.prefix, this.filename});
@@ -58,6 +58,7 @@ class _SongControlsState extends State<SongControls> {
     );
   }
 
+  // TODO: Make these controls accessible after closing song view
   _buildSliderControls() {
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15.0),
@@ -81,7 +82,8 @@ class _SongControlsState extends State<SongControls> {
 
   // TODO: This is still sorta useless
   Widget _buildVariableControls() {
-    _isFavorite = FavoritesStorageHandler.favorites.contains(widget.prefix);
+    List<String> _favorites = FavoritesStorageHandler.favorites;
+    _isFavorite = _favorites.contains(widget.prefix);
 
     return Padding(
       padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
@@ -100,16 +102,15 @@ class _SongControlsState extends State<SongControls> {
               _isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
               color: _isFavorite ? cPrimaryColor : cTextColor,
             ),
-            onPressed: () {
-              List<String> _favorites = FavoritesStorageHandler.favorites;
-
-              if (_favorites.contains(widget.prefix)) {
+            onPressed: () async {
+              if (_isFavorite) {
                 _favorites.remove(widget.prefix);
               } else {
                 _favorites.add(widget.prefix);
               }
 
-              FavoritesStorageHandler.save();
+              await FavoritesStorageHandler.save();
+              setState(() {});
             },
           ),
           IconButton(

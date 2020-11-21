@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
+
 import 'package:cakeplay/models/favorites_storage_handler.dart';
 import 'package:cakeplay/models/song_class.dart';
-import 'package:cakeplay/models/storage_handler.dart';
 import 'package:cakeplay/widgets/song_tile.dart';
-import 'package:flutter/material.dart';
 
 class FavoritesView extends StatefulWidget {
   @override
