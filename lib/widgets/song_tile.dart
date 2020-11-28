@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cakeplay/constants.dart';
+import 'package:cakeplay/text_styles.dart';
 import 'package:cakeplay/views/song_view.dart';
 import 'package:cakeplay/models/song_class.dart';
 

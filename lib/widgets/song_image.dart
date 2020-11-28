@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:cakeplay/constants.dart';
+import 'package:cakeplay/colors.dart';
 
 class SongImage extends StatelessWidget {
   SongImage(this.image);
@@ -25,7 +25,7 @@ class SongImage extends StatelessWidget {
   Decoration _buildDecoration() {
     if (image != null && File(image).existsSync()) {
       return BoxDecoration(
-        color: cPrimaryColor,
+        color: vPrimaryColor,
         image: DecorationImage(
           image: MemoryImage(
             File(image).readAsBytesSync(),
@@ -37,7 +37,7 @@ class SongImage extends StatelessWidget {
     }
 
     return BoxDecoration(
-      color: cPrimaryColor,
+      color: vPrimaryColor,
       borderRadius: BorderRadius.circular(15.0),
     );
   }
@@ -46,7 +46,7 @@ class SongImage extends StatelessWidget {
     if (image == null || image.isEmpty || !File(image).existsSync()) {
       return Icon(
         Icons.music_note_rounded,
-        color: cSecondaryColor,
+        color: vSecondaryColor,
         size: 75.0,
       );
     }

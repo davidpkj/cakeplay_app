@@ -4,9 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:audio_service/audio_service.dart';
 
-import 'package:cakeplay/constants.dart';
+import 'package:cakeplay/colors.dart';
+import 'package:cakeplay/text_styles.dart';
 import 'package:cakeplay/views/folder_view.dart';
 import 'package:cakeplay/widgets/no_permission.dart';
+import 'package:cakeplay/models/settings_handler.dart';
 import 'package:cakeplay/models/favorites_storage_handler.dart';
 
 void main() async {
@@ -34,21 +36,7 @@ class _AppRootState extends State<AppRoot> {
     // TODO: Darkmode
     return MaterialApp(
       title: "Cakeplay",
-      theme: ThemeData(
-        primarySwatch: cSwatchColor,
-        scaffoldBackgroundColor: cSecondaryColor,
-        appBarTheme: AppBarTheme(
-          brightness: Brightness.light,
-          actionsIconTheme: IconThemeData(color: cSecondaryColor),
-          iconTheme: IconThemeData(color: cPrimaryColor),
-          color: cSecondaryColor,
-          centerTitle: true,
-          elevation: 10.0,
-          textTheme: TextTheme(
-            headline6: cTitleStyle,
-          ),
-        ),
-      ),
+      theme: _generateThemeData(),
       home: AudioServiceWidget(
         child: FutureBuilder(
           future: _checkPermission(),
@@ -78,5 +66,34 @@ class _AppRootState extends State<AppRoot> {
     }
 
     return true;
+  }
+
+  ThemeData _generateThemeData() {
+    if (SettingsHandler.settings["darkmode"]) {
+      vBrightness = Brightness.dark;
+
+      vTextColor = Color(0xFFFFFFFF);
+      vPrimaryColor = Color(0xFFFB2841);
+      vSecondaryColor = Color(0xFF121212);
+      vSwatchColor = Colors.red;
+    }
+
+    return ThemeData(
+      primaryColor: vPrimaryColor,
+      primarySwatch: vSwatchColor,
+      scaffoldBackgroundColor: vSecondaryColor,
+      iconTheme: IconThemeData(color: vPrimaryColor),
+      appBarTheme: AppBarTheme(
+        brightness: vBrightness,
+        actionsIconTheme: IconThemeData(color: vSecondaryColor),
+        iconTheme: IconThemeData(color: vPrimaryColor),
+        color: vSecondaryColor,
+        centerTitle: true,
+        elevation: 10.0,
+        textTheme: TextTheme(
+          headline6: cTitleStyle,
+        ),
+      ),
+    );
   }
 }

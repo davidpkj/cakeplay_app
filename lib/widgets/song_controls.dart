@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:audio_service/audio_service.dart';
 
-import 'package:cakeplay/constants.dart';
+import 'package:cakeplay/colors.dart';
 import 'package:cakeplay/models/favorites_storage_handler.dart';
 
 class SongControls extends StatefulWidget {
@@ -58,11 +58,13 @@ class _SongControlsState extends State<SongControls> {
     );
   }
 
-  // TODO: Make these controls accessible after closing song view
+  // TODO: Make these controls accessible after closing song view -> sexy modal bottom sheet, swipe up/down animation
   _buildSliderControls() {
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15.0),
       child: Slider(
+        activeColor: vPrimaryColor,
+        inactiveColor: vPrimaryColor.withOpacity(0.3),
         value: _value,
         onChangeStart: (_) {
           _draging = true;
@@ -80,7 +82,6 @@ class _SongControlsState extends State<SongControls> {
     );
   }
 
-  // TODO: This is still sorta useless
   Widget _buildVariableControls() {
     List<String> _favorites = FavoritesStorageHandler.favorites;
     _isFavorite = _favorites.contains(widget.prefix);
@@ -100,7 +101,7 @@ class _SongControlsState extends State<SongControls> {
           IconButton(
             icon: Icon(
               _isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-              color: _isFavorite ? cPrimaryColor : cTextColor,
+              color: _isFavorite ? vPrimaryColor : vTextColor,
             ),
             onPressed: () async {
               if (_isFavorite) {
@@ -116,7 +117,7 @@ class _SongControlsState extends State<SongControls> {
           IconButton(
             icon: Icon(
               Icons.repeat_one_rounded,
-              color: _repeat ? cPrimaryColor : cTextColor,
+              color: _repeat ? vPrimaryColor : vTextColor,
             ),
             onPressed: () async {
               _repeat = await AudioService.customAction("toggleRepeat");
@@ -137,7 +138,7 @@ class _SongControlsState extends State<SongControls> {
           IconButton(
             icon: Icon(
               Icons.fast_rewind_rounded,
-              color: cTextColor,
+              color: vTextColor,
               size: 35.0,
             ),
             onPressed: () {
@@ -145,11 +146,11 @@ class _SongControlsState extends State<SongControls> {
             },
           ),
           FloatingActionButton(
-            backgroundColor: cPrimaryColor,
+            backgroundColor: vPrimaryColor,
             elevation: 0,
             child: Icon(
               (AudioService.playbackState != null && AudioService.playbackState.playing) ? Icons.pause_rounded : Icons.play_arrow_rounded,
-              color: cSecondaryColor,
+              color: vSecondaryColor,
               size: 35.0,
             ),
             onPressed: () {
@@ -163,7 +164,7 @@ class _SongControlsState extends State<SongControls> {
           IconButton(
             icon: Icon(
               Icons.fast_forward_rounded,
-              color: cTextColor,
+              color: vTextColor,
               size: 35.0,
             ),
             onPressed: () {

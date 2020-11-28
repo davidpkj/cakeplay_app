@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:cakeplay/constants.dart';
+import 'package:cakeplay/colors.dart';
 import 'package:cakeplay/views/playlist_view.dart';
 
 class CollectionButton extends StatelessWidget {
@@ -39,11 +39,11 @@ class CollectionButton extends StatelessWidget {
     return Container(
       child: Icon(
         Icons.music_note_rounded,
-        color: cSecondaryColor,
+        color: vSecondaryColor,
         size: 75.0,
       ),
       decoration: BoxDecoration(
-        color: cPrimaryColor,
+        color: vPrimaryColor,
         borderRadius: BorderRadius.circular(15.0),
       ),
     );

@@ -56,17 +56,20 @@ class AudioPlayerTask extends BackgroundAudioTask {
   }
 
   _playPrevious() async {
-    if (_history.length > 1 && _history[1].isNotEmpty) {
-      await _load(Song.fromPath(fullPath: _history[1]));
+    if (_history.length > 1) {
+      _history.removeLast();
+      await _load(Song.fromPath(fullPath: _history[_history.length - 1]));
     } else {
       _player.seek(Duration(milliseconds: 0));
     }
   }
 
   _load(Song song) async {
+    if (_history.isEmpty || _history.last != song.path) _history.add(song.path);
+
     await _player.setFilePath(song.path);
     _refreshMediaItem(song);
-    _history.add(song.path);
+
     await _player.play();
   }
 

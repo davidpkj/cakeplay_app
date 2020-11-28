@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cakeplay/constants.dart';
+import 'package:cakeplay/text_styles.dart';
 
 class ScreenBar extends StatelessWidget {
   ScreenBar({this.title});
@@ -16,10 +16,7 @@ class ScreenBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios_rounded,
-              color: cPrimaryColor,
-            ),
+            icon: Icon(Icons.arrow_back_ios_rounded),
             onPressed: () {
               Navigator.pop(context);
             },

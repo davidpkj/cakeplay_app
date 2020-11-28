@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:cakeplay/constants.dart';
+import 'package:cakeplay/colors.dart';
+import 'package:cakeplay/views/settings_view.dart';
 import 'package:cakeplay/views/favorites_view.dart';
 import 'package:cakeplay/models/storage_handler.dart';
 import 'package:cakeplay/widgets/collection_button.dart';
@@ -24,14 +25,22 @@ class _FolderViewState extends State<FolderView> {
             title: Text("Folders"),
             centerTitle: true,
             leading: IconButton(
-              icon: Icon(
-                Icons.favorite,
-                color: cPrimaryColor,
-              ),
+              icon: Icon(Icons.favorite),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => FavoritesView()));
               },
             ),
+            actions: [
+              IconButton(
+                icon: Icon(
+                  Icons.settings_rounded,
+                  color: vPrimaryColor,
+                ),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsView()));
+                },
+              ),
+            ],
           ),
           SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

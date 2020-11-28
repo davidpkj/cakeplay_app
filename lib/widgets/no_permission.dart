@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:cakeplay/constants.dart';
+import 'package:cakeplay/colors.dart';
+import 'package:cakeplay/text_styles.dart';
 
 class NoPermission extends StatelessWidget {
   NoPermission({this.requestAgainCallback});
@@ -32,7 +33,7 @@ class NoPermission extends StatelessWidget {
           ),
         ),
         RaisedButton(
-          color: cPrimaryColor,
+          color: vPrimaryColor,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(

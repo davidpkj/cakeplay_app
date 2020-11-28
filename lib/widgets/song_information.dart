@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:audio_service/audio_service.dart';
 
-import 'package:cakeplay/constants.dart';
+import 'package:cakeplay/text_styles.dart';
 
 class SongInformation extends StatelessWidget {
   SongInformation(this.title);
