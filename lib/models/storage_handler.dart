@@ -2,7 +2,7 @@ import 'dart:io';
 
 class StorageHandler {
   static List<String> listDirectories() {
-    List<String> _result = List<String>();
+    List<String> _result = [];
     List<FileSystemEntity> _directory = Directory("/storage/emulated/0/Music/").listSync();
 
     for (FileSystemEntity _entity in _directory) {
@@ -13,7 +13,7 @@ class StorageHandler {
   }
 
   static List<String> listMusicFiles(String path) {
-    List<String> _result = List<String>();
+    List<String> _result = [];
     List<FileSystemEntity> _directory = Directory(path).listSync();
 
     for (FileSystemEntity _entity in _directory) {

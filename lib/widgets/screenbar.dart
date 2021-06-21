@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cakeplay/text_styles.dart';
 
 class ScreenBar extends StatelessWidget {
-  ScreenBar({this.title});
+  ScreenBar({required this.title});
 
   final String title;
 

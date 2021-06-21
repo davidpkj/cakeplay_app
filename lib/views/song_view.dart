@@ -12,7 +12,7 @@ import 'package:cakeplay/models/background_audio_handler.dart';
 void _entrypoint() => AudioServiceBackground.run(() => AudioPlayerTask());
 
 class SongView extends StatefulWidget {
-  SongView({Key key, this.song}) : super(key: key);
+  SongView({Key? key, required this.song}) : super(key: key);
 
   final Song song;
 

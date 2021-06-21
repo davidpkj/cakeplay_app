@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FavoritesStorageHandler {
-  static List<String> favorites = List<String>();
+  static List<String> favorites = [];
 
   static Future<void> save() async {
     final _prefs = await SharedPreferences.getInstance();

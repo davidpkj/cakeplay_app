@@ -7,7 +7,7 @@ import 'package:cakeplay/colors.dart';
 class SongImage extends StatelessWidget {
   SongImage(this.image);
 
-  final String image;
+  final String? image;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +23,12 @@ class SongImage extends StatelessWidget {
   }
 
   Decoration _buildDecoration() {
-    if (image != null && File(image).existsSync()) {
+    if (image != null && File(image!).existsSync()) {
       return BoxDecoration(
         color: vPrimaryColor,
         image: DecorationImage(
           image: MemoryImage(
-            File(image).readAsBytesSync(),
+            File(image!).readAsBytesSync(),
           ),
           fit: BoxFit.cover,
         ),
@@ -42,8 +42,8 @@ class SongImage extends StatelessWidget {
     );
   }
 
-  Widget _buildChild() {
-    if (image == null || image.isEmpty || !File(image).existsSync()) {
+  Widget? _buildChild() {
+    if (image == null || image!.isEmpty || !File(image!).existsSync()) {
       return Icon(
         Icons.music_note_rounded,
         color: vSecondaryColor,

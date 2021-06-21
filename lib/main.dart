@@ -69,7 +69,7 @@ class _AppRootState extends State<AppRoot> {
   }
 
   ThemeData _generateThemeData() {
-    if (SettingsHandler.settings["darkmode"]) {
+    if (SettingsHandler.settings["darkmode"]!) {
       vBrightness = Brightness.dark;
 
       vTextColor = Color(0xFFFFFFFF);

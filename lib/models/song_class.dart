@@ -5,9 +5,9 @@ class Song {
   String image;
   String title;
 
-  Song({this.path, this.image, this.title});
+  Song({required this.path, required this.image, required this.title});
 
-  static Song fromPath({String fullPath}) {
+  static Song fromPath({required String fullPath}) {
     String _name = fullPath.split("/").last;
 
     return Song(

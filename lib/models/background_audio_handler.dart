@@ -9,7 +9,7 @@ import 'package:cakeplay/models/storage_handler.dart';
 
 class AudioPlayerTask extends BackgroundAudioTask {
   static final _player = AudioPlayer();
-  static final _history = List<String>();
+  static final _history = [];
   static bool _repeat = false;
 
   _refreshMediaItem(Song song) async {
@@ -20,13 +20,14 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   _seekToRelative(double value) async {
     if (_player.duration != null) {
-      _player.seek(_player.duration * value);
+      _player.seek(_player.duration! * value);
     }
   }
 
   _getPositionRelative() async {
-    if (_player.position != null && _player.duration != null) {
-      return (_player.position.inMilliseconds / _player.duration.inMilliseconds).toDouble();
+    if (_player.duration != null) {
+      // FIXME: Is _player.position really never null?
+      return (_player.position.inMilliseconds / _player.duration!.inMilliseconds).toDouble();
     }
 
     return 0.0;
@@ -102,7 +103,9 @@ class AudioPlayerTask extends BackgroundAudioTask {
   }
 
   @override
-  onStart(Map<String, dynamic> params) async {
+  onStart(Map<String, dynamic>? params) async {
+    if (params == null || params["path"] == null) return;
+
     Song song = Song.fromPath(fullPath: params["path"]);
 
     _refreshMediaItem(song);
@@ -111,7 +114,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
       AudioServiceBackground.setState(
         playing: playerState.playing,
         processingState: {
-          ProcessingState.none: AudioProcessingState.none,
+          ProcessingState.idle: AudioProcessingState.none,
           ProcessingState.loading: AudioProcessingState.connecting,
           ProcessingState.buffering: AudioProcessingState.buffering,
           ProcessingState.ready: AudioProcessingState.ready,

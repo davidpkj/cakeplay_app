@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:cakeplay/colors.dart';
 import 'package:cakeplay/text_styles.dart';
 
 class NoPermission extends StatelessWidget {
   NoPermission({this.requestAgainCallback});
 
-  final Function requestAgainCallback;
+  final Function? requestAgainCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +31,7 @@ class NoPermission extends StatelessWidget {
             style: cTextStyle,
           ),
         ),
-        RaisedButton(
-          color: vPrimaryColor,
+        ElevatedButton(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
@@ -44,7 +42,9 @@ class NoPermission extends StatelessWidget {
               ),
             ),
           ),
-          onPressed: requestAgainCallback,
+          onPressed: () {
+            requestAgainCallback!();
+          },
         ),
       ];
     } else {

@@ -5,7 +5,7 @@ import 'package:cakeplay/widgets/song_tile.dart';
 import 'package:cakeplay/models/storage_handler.dart';
 
 class PlaylistView extends StatefulWidget {
-  const PlaylistView({Key key, this.path}) : super(key: key);
+  const PlaylistView({Key? key, required this.path}) : super(key: key);
 
   final String path;
 

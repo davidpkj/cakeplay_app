@@ -5,10 +5,10 @@ import 'package:cakeplay/views/song_view.dart';
 import 'package:cakeplay/models/song_class.dart';
 
 class SongTile extends StatelessWidget {
-  SongTile({this.song, this.refreshCallback});
+  SongTile({required this.song, this.refreshCallback});
 
   final Song song;
-  final Function refreshCallback;
+  final Function? refreshCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class SongTile extends StatelessWidget {
           ),
         );
 
-        if (refreshCallback != null) refreshCallback();
+        if (refreshCallback != null) refreshCallback!();
       },
     );
   }

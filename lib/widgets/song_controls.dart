@@ -8,7 +8,7 @@ import 'package:cakeplay/colors.dart';
 import 'package:cakeplay/models/favorites_storage_handler.dart';
 
 class SongControls extends StatefulWidget {
-  SongControls({this.prefix, this.filename});
+  SongControls({required this.prefix, required this.filename});
 
   final String prefix;
   final String filename;
@@ -22,7 +22,7 @@ class _SongControlsState extends State<SongControls> {
   bool _draging = false;
   bool _repeat = false;
   double _value = 0.0;
-  Timer _timer;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -43,7 +43,7 @@ class _SongControlsState extends State<SongControls> {
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _timer!.cancel();
     super.dispose();
   }
 
@@ -149,7 +149,7 @@ class _SongControlsState extends State<SongControls> {
             backgroundColor: vPrimaryColor,
             elevation: 0,
             child: Icon(
-              (AudioService.playbackState != null && AudioService.playbackState.playing) ? Icons.pause_rounded : Icons.play_arrow_rounded,
+              AudioService.playbackState.playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
               color: vSecondaryColor,
               size: 35.0,
             ),

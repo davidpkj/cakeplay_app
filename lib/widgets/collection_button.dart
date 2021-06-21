@@ -6,7 +6,7 @@ import 'package:cakeplay/colors.dart';
 import 'package:cakeplay/views/playlist_view.dart';
 
 class CollectionButton extends StatelessWidget {
-  CollectionButton({this.path, this.imagePath});
+  CollectionButton({required this.path, required this.imagePath});
 
   final String path;
   final String imagePath;

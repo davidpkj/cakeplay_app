@@ -7,31 +7,26 @@ import 'package:cakeplay/text_styles.dart';
 class SongInformation extends StatelessWidget {
   SongInformation(this.title);
 
-  final String title;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
+    String title = "Unknown Title";
+
+    AudioService.currentMediaItemStream.listen((event) {
+      title = event?.title ?? "Unknown Title";
+    });
+
+    // TODO: TEST
+    // TODO: Make very long text move
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 18.0),
-          child: StreamBuilder<MediaItem>(
-            stream: AudioService.currentMediaItemStream,
-            builder: (BuildContext context, AsyncSnapshot<MediaItem> snapshot) {
-              if (snapshot.hasError || !snapshot.hasData) {
-                return Text(
-                  title ?? "Unknown Title",
-                  style: cSongTitleStyle,
-                  textAlign: TextAlign.center,
-                );
-              } else {
-                return Text(
-                  snapshot.data.title ?? "Unknown Title",
-                  style: cSongTitleStyle,
-                  textAlign: TextAlign.center,
-                );
-              }
-            },
+          child: Text(
+            title,
+            style: cSongTitleStyle,
+            textAlign: TextAlign.center,
           ),
         ),
         /*
