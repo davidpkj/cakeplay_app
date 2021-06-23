@@ -35,13 +35,16 @@ class _SongViewState extends State<SongView> {
 
   @override
   Widget build(BuildContext context) {
+    MediaItem? mediaItem = AudioService.currentMediaItem;
+
+    // TODO: Update song information on song change
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           ScreenBar(title: "Now playing"),
-          SongImage(widget.song.image),
-          SongInformation(widget.song.title),
+          SongImage(widget.song.image), //FIXME: Implement changing artwork
+          SongInformation(mediaItem?.title ?? widget.song.title),
           SongControls(prefix: widget.song.path, filename: widget.song.title),
         ],
       ),

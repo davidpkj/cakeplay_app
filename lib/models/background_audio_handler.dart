@@ -13,6 +13,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   static bool _repeat = false;
 
   _refreshMediaItem(Song song) async {
+    // TODO: Add artwork
     MediaItem mediaItem = MediaItem(id: song.path, title: song.title, album: "");
 
     AudioServiceBackground.setMediaItem(mediaItem);
@@ -121,8 +122,9 @@ class AudioPlayerTask extends BackgroundAudioTask {
           ProcessingState.completed: AudioProcessingState.completed,
         }[playerState.processingState],
         controls: [
+          MediaControl.skipToPrevious,
           playerState.playing ? MediaControl.pause : MediaControl.play,
-          MediaControl.stop,
+          MediaControl.skipToNext,
         ],
       );
     });
