@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:cakeplay/colors.dart';
+import 'package:cakeplay_app/models/app_theme_class.dart';
 
-class SongImage extends StatelessWidget {
-  SongImage(this.image);
+class PlayerArtwork extends StatelessWidget {
+  PlayerArtwork({Key? key, required this.artworkFile});
 
-  final String? image;
+  final File artworkFile;
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +23,11 @@ class SongImage extends StatelessWidget {
   }
 
   Decoration _buildDecoration() {
-    if (image != null && File(image!).existsSync()) {
+    if (artworkFile.existsSync()) {
       return BoxDecoration(
-        color: vPrimaryColor,
+        color: AppTheme.primaryColor,
         image: DecorationImage(
-          image: MemoryImage(
-            File(image!).readAsBytesSync(),
-          ),
+          image: FileImage(artworkFile),
           fit: BoxFit.cover,
         ),
         borderRadius: BorderRadius.circular(15.0),
@@ -37,16 +35,16 @@ class SongImage extends StatelessWidget {
     }
 
     return BoxDecoration(
-      color: vPrimaryColor,
+      color: AppTheme.primaryColor,
       borderRadius: BorderRadius.circular(15.0),
     );
   }
 
   Widget? _buildChild() {
-    if (image == null || image!.isEmpty || !File(image!).existsSync()) {
+    if (!artworkFile.existsSync()) {
       return Icon(
         Icons.music_note_rounded,
-        color: vSecondaryColor,
+        color: AppTheme.secondaryColor,
         size: 75.0,
       );
     }

@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:permission_handler/permission_handler.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-import 'package:cakeplay/colors.dart';
-import 'package:cakeplay/text_styles.dart';
-import 'package:cakeplay/views/folder_view.dart';
-import 'package:cakeplay/widgets/no_permission.dart';
-import 'package:cakeplay/models/settings_handler.dart';
-import 'package:cakeplay/models/favorites_storage_handler.dart';
+import 'package:cakeplay_app/views/folder_view.dart';
+import 'package:cakeplay_app/models/app_theme_class.dart';
+import 'package:cakeplay_app/handlers/storage_handler.dart';
+import 'package:cakeplay_app/views/no_permission_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await FavoritesStorageHandler.load();
+  // await SettingsHandler.load();
+  // await StorageHandler.loadFavorites();
+  await StorageHandler.initFileUris();
 
   runApp(AppRoot());
 }
 
 class AppRoot extends StatefulWidget {
+  AppRoot({Key? key}) : super(key: key);
+
   @override
   _AppRootState createState() => _AppRootState();
 }
@@ -33,67 +35,57 @@ class _AppRootState extends State<AppRoot> {
       statusBarColor: Colors.transparent,
     ));
 
-    // TODO: Darkmode
     return MaterialApp(
       title: "Cakeplay",
-      theme: _generateThemeData(),
+      theme: AppTheme.asThemeData(),
       home: AudioServiceWidget(
-        child: FutureBuilder(
-          future: _checkPermission(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasError) return NoPermission();
+        child: Builder(
+          builder: (BuildContext context) => FutureBuilder(
+            future: _checkPermission(context),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasError) return NoPermissionView();
 
-            if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-              if (snapshot.data == true) return FolderView();
+              if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                if (snapshot.data == true) return FolderView();
 
-              return NoPermission(requestAgainCallback: _requestAgain);
-            }
+                return NoPermissionView(requestAgainCallback: _requestAgain);
+              }
 
-            return NoPermission();
-          },
+              return NoPermissionView();
+            },
+          ),
         ),
       ),
     );
   }
 
-  _requestAgain() {
+  Future<void> _requestAgain() async {
     setState(() {});
   }
 
-  Future<bool> _checkPermission() async {
-    if (!await Permission.storage.request().isGranted) {
-      return false;
+  Future<bool> _checkPermission(BuildContext context) async {
+    PermissionStatus permission = await Permission.storage.request();
+    if (permission.isGranted) {
+      return true;
     }
 
-    return true;
-  }
-
-  ThemeData _generateThemeData() {
-    if (SettingsHandler.settings["darkmode"]!) {
-      vBrightness = Brightness.dark;
-
-      vTextColor = Color(0xFFFFFFFF);
-      vPrimaryColor = Color(0xFFFB2841);
-      vSecondaryColor = Color(0xFF121212);
-      vSwatchColor = Colors.red;
-    }
-
-    return ThemeData(
-      primaryColor: vPrimaryColor,
-      primarySwatch: vSwatchColor,
-      scaffoldBackgroundColor: vSecondaryColor,
-      iconTheme: IconThemeData(color: vPrimaryColor),
-      appBarTheme: AppBarTheme(
-        brightness: vBrightness,
-        actionsIconTheme: IconThemeData(color: vSecondaryColor),
-        iconTheme: IconThemeData(color: vPrimaryColor),
-        color: vSecondaryColor,
-        centerTitle: true,
-        elevation: 10.0,
-        textTheme: TextTheme(
-          headline6: cTitleStyle,
-        ),
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: new Text("Permission not granted"),
+        content: new Text("Alternatively you can grant permission in the settings."),
+        actions: <Widget>[
+          new TextButton(
+            child: new Text("Open settings"),
+            onPressed: () async {
+              await openAppSettings();
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       ),
     );
+
+    return false;
   }
 }

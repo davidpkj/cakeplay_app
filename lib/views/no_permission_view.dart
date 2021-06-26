@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
-import 'package:cakeplay/text_styles.dart';
+import 'package:cakeplay_app/models/app_theme_class.dart';
 
-class NoPermission extends StatelessWidget {
-  NoPermission({this.requestAgainCallback});
+class NoPermissionView extends StatelessWidget {
+  NoPermissionView({this.requestAgainCallback});
 
   final Function? requestAgainCallback;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.primaryColor,
       body: Container(
         width: double.infinity,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: _buildChildren(),
         ),
@@ -24,22 +25,27 @@ class NoPermission extends StatelessWidget {
   List<Widget> _buildChildren() {
     if (requestAgainCallback != null) {
       return [
+        Container(),
+        Icon(
+          Icons.music_note,
+          color: Colors.white,
+          size: 150.0,
+        ),
         Padding(
           padding: const EdgeInsets.all(22.0),
           child: Text(
-            "Please grant storage permission.",
-            style: cTextStyle,
+            "This app needs to scan your files to work. Please grant permission to storage.",
+            style: AppTheme.permissionTextStyle,
+            textAlign: TextAlign.center,
           ),
         ),
         ElevatedButton(
+          style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white)),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
               "Grant permission",
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: "Montserrat",
-              ),
+              style: AppTheme.permissionButtonTextStyle,
             ),
           ),
           onPressed: () {
@@ -49,13 +55,8 @@ class NoPermission extends StatelessWidget {
       ];
     } else {
       return [
-        CircularProgressIndicator(),
-        Padding(
-          padding: const EdgeInsets.all(22.0),
-          child: Text(
-            "Loading something.",
-            style: cTextStyle,
-          ),
+        CircularProgressIndicator(
+          color: Colors.white,
         ),
       ];
     }
