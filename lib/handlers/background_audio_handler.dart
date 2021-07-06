@@ -128,11 +128,29 @@ class AudioPlayerTask extends BackgroundAudioTask {
     );
   }
 
+  _playSong(String songPath) async {
+    Song song = Song.fromPath(fullPath: songPath, fallbackArtworkUri: _appDirectoryArtworkUri);
+
+    _refreshMediaItem(song);
+
+    // TODO: On end, if loop not set, set the play/pause button to "play" and on press, repeat song
+    _player.processingStateStream.listen((processingState) {
+      if (processingState == ProcessingState.completed) {
+        _playNext();
+      }
+    });
+
+    _load(song);
+  }
+
   @override
   onCustomAction(String id, dynamic value) async {
     switch (id) {
       case "load":
         await _load(value);
+        break;
+      case "playSong":
+        await _playSong(value);
         break;
       case "getCurrentMediaItem":
         await _getCurrentMediaItem();
@@ -149,25 +167,13 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   @override
   onStart(Map<String, dynamic>? params) async {
-    if (params == null || params["path"] == null) return;
+    if (params == null) return;
 
     if (params["appDirectoryArtwork"] != null) _appDirectoryArtworkUri = Uri.parse("file://${params["appDirectoryArtwork"]}");
-    Song song = Song.fromPath(fullPath: params["path"], fallbackArtworkUri: _appDirectoryArtworkUri);
-
-    _refreshMediaItem(song);
 
     _eventSubscription = _player.playbackEventStream.listen((event) {
       _broadcastState();
     });
-
-    // TODO: On end, if loop not set, set the play/pause button to "play" and on press, repeat song
-    _player.processingStateStream.listen((processingState) {
-      if (processingState == ProcessingState.completed) {
-        _playNext();
-      }
-    });
-
-    _load(song);
   }
 
   @override

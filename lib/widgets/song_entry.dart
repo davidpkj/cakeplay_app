@@ -1,6 +1,6 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cakeplay_app/views/player_view.dart';
 import 'package:cakeplay_app/models/song_class.dart';
 import 'package:cakeplay_app/models/app_theme_class.dart';
 
@@ -29,7 +29,7 @@ class SongEntry extends StatelessWidget {
       ),
       */
       onTap: () async {
-        await Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerView(song: song)));
+        AudioService.customAction("playSong", song.path);
 
         if (refreshCallback != null) refreshCallback!();
       },

@@ -145,6 +145,7 @@ class _PlayerControlsState extends State<PlayerControls> {
             },
           ),
           FloatingActionButton(
+            heroTag: null,
             backgroundColor: AppTheme.primaryColor,
             elevation: 0,
             child: Icon(

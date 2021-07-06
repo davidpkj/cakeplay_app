@@ -56,9 +56,23 @@ class AppTheme {
   );
 
   static TextStyle permissionButtonTextStyle = TextStyle(
-    color: AppTheme.primaryColor,
+    color: primaryColor,
     fontFamily: "Montserrat",
     fontSize: 18.0,
+  );
+
+  static TextStyle navigationBarText = TextStyle(
+    color: primaryColor,
+    fontFamily: "Montserrat",
+    fontSize: 16.0,
+  );
+
+  static IconThemeData selectedNavigationIconTheme = IconThemeData(
+    color: primaryColor,
+  );
+
+  static IconThemeData unselectedNavigationIconTheme = IconThemeData(
+    color: Colors.grey,
   );
 
   static ThemeData asThemeData() {

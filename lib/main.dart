@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:cakeplay_app/views/folder_view.dart';
+import 'package:cakeplay_app/views/main_view.dart';
 import 'package:cakeplay_app/models/app_theme_class.dart';
 import 'package:cakeplay_app/handlers/storage_handler.dart';
 import 'package:cakeplay_app/views/no_permission_view.dart';
@@ -13,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // await SettingsHandler.load();
-  // await StorageHandler.loadFavorites();
+  await StorageHandler.loadFavorites();
   await StorageHandler.initFileUris();
 
   runApp(AppRoot());
@@ -46,7 +46,7 @@ class _AppRootState extends State<AppRoot> {
               if (snapshot.hasError) return NoPermissionView();
 
               if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                if (snapshot.data == true) return FolderView();
+                if (snapshot.data == true) return MainView();
 
                 return NoPermissionView(requestAgainCallback: _requestAgain);
               }

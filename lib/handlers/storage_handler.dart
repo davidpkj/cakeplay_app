@@ -12,9 +12,11 @@ class StorageHandler {
   static List<String> favorites = [];
   static Uri? appDirectoryArtwork;
 
+  // TODO: Filter functions basically the same
   static String? _filterDirectory(FileSystemEntity file) {
     String _path = file.path;
 
+    if (_path.split("/").last.startsWith(".")) return null;
     if (Directory(_path).existsSync() && !_path.startsWith(".")) {
       return _path;
     }
@@ -23,7 +25,8 @@ class StorageHandler {
   static String? _filterMusicFile(FileSystemEntity file) {
     String _path = file.path;
 
-    if (!_path.startsWith(".") && (_path.endsWith(".mp3")) || _path.endsWith(".opus")) {
+    if (_path.split("/").last.startsWith(".")) return null;
+    if (_path.endsWith(".mp3") || _path.endsWith(".opus")) {
       return _path;
     }
   }
@@ -54,9 +57,13 @@ class StorageHandler {
 
   static Future<void> loadFavorites() async {
     final _prefs = await SharedPreferences.getInstance();
-    final List<String> _tempMap = json.decode(_prefs.getString("favorties") ?? "[]") as List<String>;
+    final List<dynamic> _tempMap = json.decode(_prefs.getString("favorites") ?? "[]");
 
-    if (_tempMap.isNotEmpty) favorites.addAll(_tempMap);
+    if (_tempMap.isNotEmpty) {
+      _tempMap.forEach((element) {
+        favorites.add(element);
+      });
+    }
   }
 
   static Future<void> initFileUris() async {

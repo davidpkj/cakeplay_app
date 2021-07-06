@@ -7,7 +7,6 @@ import 'package:cakeplay_app/widgets/song_entry.dart';
 import 'package:cakeplay_app/models/folder_class.dart';
 import 'package:cakeplay_app/models/app_theme_class.dart';
 import 'package:cakeplay_app/handlers/storage_handler.dart';
-import 'package:cakeplay_app/widgets/small_player_controls.dart';
 
 class PlaylistView extends StatefulWidget {
   const PlaylistView({Key? key, required this.folder}) : super(key: key);
@@ -22,7 +21,6 @@ class _PlaylistViewState extends State<PlaylistView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: SmallPlayerControls(),
       body: FutureBuilder<List<String>>(
         future: StorageHandler.listDirectoryContent(widget.folder.path, DirectoryContentType.File),
         builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
